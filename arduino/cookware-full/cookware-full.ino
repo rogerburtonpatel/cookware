@@ -8,21 +8,35 @@ Adafruit_TSC2007 touch;
 
 #define X_MIN 250 
 #define Y_MIN 450
+
+#define X_CENTER_LO 1460
+#define X_CENTER_HI 2560
+#define Y_CENTER_LO 1700
+#define Y_CENTER_HI 3100
+
 #define X_MAX 3900 
 #define Y_MAX 3900 
+
 #define PAD_CENTER 2000
 
+enum Y_zone {lo,  y_center, hi};
+enum X_zone {left, x_center, right};
+
+enum Pad_out_region {
+  pad_centercode,
+  pad_sizzler_1, pad_sizzler_2,  pad_sizzler_3, pad_sizzler_4,
+  pad_hicenter,  pad_leftcenter, pad_locenter,  pad_rightcenter
+};
 /* KEY - ROTARY KNOB CONTROLLERS */
 
 #define rotaryPinA 2
 #define rotaryPinB 3
 
 volatile int knob_pos;
-const int KNOB_MIN = 0;
-const int KNOB_MAX = 127;
+#define KNOB_MIN 0
+#define KNOB_MAX 127
 
 int initAPos;
-
 
 unsigned long knobISR_last_run;
 volatile bool pulseStart = false;
@@ -31,13 +45,13 @@ volatile bool pulseStart = false;
 #define SW 4
 
 /* SIZZLERS - LINEAR SOFTPOTS */
-int softPotPinNum1 = A0;
-int softPotPinNum2 = A1;
-int softPotPinNum3 = A2;
-int softPotPinNum4 = A3;
+#define softPotPinNum1 A0
+#define softPotPinNum2 A1
+#define softPotPinNum3 A2
+#define softPotPinNum4 A3
 
 /* VOLUME - LOG KNOB CONTROLLERS */
-int volumePin = A4;
+#define volumePin A4
 
 void setup() {
     Serial.begin(9600);
@@ -66,19 +80,15 @@ void setup() {
 }
 
 void loop() {
-  serialOutDeliniated(softPotPinNum1);
-  serialOutDeliniated(softPotPinNum2);
-  serialOutDeliniated(softPotPinNum3);
-  serialOutDeliniated(softPotPinNum4);
-  serialOutKeyInfo(); 
-  serialOutXY();
-  serialOutVolume(volumePin);
-  serialOutButtonPress();
+  // serialOutDeliniated(softPotPinNum1);
+  // serialOutDeliniated(softPotPinNum2);
+  // serialOutDeliniated(softPotPinNum3);
+  // serialOutDeliniated(softPotPinNum4);
+  // serialOutKeyInfo(); 
+  serialOutXY(); // 0-9. read into max with js switch or array. 
+  // serialOutVolume(volumePin);
+  // serialOutButtonPress();
   Serial.println();
-    // Serial.print(x); Serial.print(", ");
-    // Serial.print(y); Serial.print(", ");
-    // Serial.print(z1); Serial.print(" / ");
-    // Serial.print(z2); Serial.println(")");
   delay(50);
 }
 
@@ -92,19 +102,27 @@ void serialOutVolume(int volpin) {
 void serialOutXY() {
   uint16_t x, y, z1, z2;
   if (touch.read_touch(&x, &y, &z1, &z2)) {
-    if (x < PAD_CENTER) {
-      if (y < PAD_CENTER) { 
-          Serial.print(4);
-      } else { 
-          Serial.print(1); 
-        }
-    } else if (y < PAD_CENTER) {
-          Serial.print(3); 
-    } else {
-          Serial.print(2); 
+    const X_zone xzone = 
+    x <= X_CENTER_LO ? right :
+    x <  X_CENTER_HI ? x_center :
+    left; 
+    const Y_zone yzone = 
+    y <= Y_CENTER_LO ? lo :
+    y <  Y_CENTER_HI ? y_center :
+    hi; 
+    // Serial.println(xzone);
+    // Serial.println(yzone);
+    switch (xzone + 3 * yzone) {
+      case 0: Serial.print(pad_sizzler_3);   break;
+      case 1: Serial.print(pad_locenter);    break;
+      case 2: Serial.print(pad_sizzler_4);   break;
+      case 3: Serial.print(pad_leftcenter);  break;
+      case 4: Serial.print(pad_centercode);  break;
+      case 5: Serial.print(pad_rightcenter); break;
+      case 6: Serial.print(pad_sizzler_2);   break;
+      case 7: Serial.print(pad_hicenter);    break;
+      case 8: Serial.print(pad_sizzler_1);   break;      
     }
-  } else {
-          Serial.print(0);
   }
   Serial.print(" ");
 }
