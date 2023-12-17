@@ -97,7 +97,6 @@ void setup() {
     key_knob_pos = 0;
     knobISR_last_run = 0;
     attachInterrupt(digitalPinToInterrupt(rotaryPinA), knobISR, CHANGE);
-
     /* VOLUME - LOG KNOB CONTROLLERS */
     pinMode(volumePin, INPUT);
 
@@ -146,15 +145,15 @@ void readAndOutputXY() {
     hi; 
     // Gives desired offset pattern in relatively few LOC
     switch (xzone + 3 * yzone) {
-      case 0: Serial.print(pad_sizzler_3);   break;
-      case 1: Serial.print(pad_locenter);    break;
-      case 2: Serial.print(pad_sizzler_4);   break;
-      case 3: Serial.print(pad_leftcenter);  break;
+      case 0: Serial.print(pad_sizzler_1);   break;
+      case 1: Serial.print(pad_hicenter);    break; 
+      case 2: Serial.print(pad_sizzler_2);   break;
+      case 3: Serial.print(pad_rightcenter); break;
       case 4: Serial.print(pad_centercode);  break;
-      case 5: Serial.print(pad_rightcenter); break;
-      case 6: Serial.print(pad_sizzler_2);   break;
-      case 7: Serial.print(pad_hicenter);    break;
-      case 8: Serial.print(pad_sizzler_1);   break;      
+      case 5: Serial.print(pad_leftcenter);  break;
+      case 6: Serial.print(pad_sizzler_4);   break;
+      case 7: Serial.print(pad_locenter);    break;
+      case 8: Serial.print(pad_sizzler_3);   break;
     }
   } else {
     Serial.print(0);
@@ -179,7 +178,6 @@ void readAndOutputLinearSoftpot(int pin) {
   }
   Serial.print(" ");
 }
-
 /* helper for rotary encoder. */
 void knobISR() {
   // 5ms buffer
