@@ -352,20 +352,20 @@ void SetupPurpleAndGreenPalette()
 
 void initLights() 
 {
-  uint64_t time_end = millis() + 7000;
+  uint64_t time_end = millis() + 3000;
 
   float brightness = 4.0; 
   const float correction = 255.0 / 400.0;
   uint8_t volume = 0;
   while (millis() < time_end) {
     
-    if (time_end - millis() > 3500) {
-      volume = min(200, ++volume);
+    if (time_end - millis() > 1500) {
+      volume = min(200, volume += 2);
     } else {
-      volume = volume == 0 ? 0 : --volume;
+      volume = max(50, --volume);
     }
     /* sound on, increasing-then-decreasing volume */
-    Serial.print("1 0 0 3 0 1 ");
+    Serial.print("1 0 0 3 1 1 ");
     Serial.print(volume);
     Serial.print(" ");
     Serial.println(0);
@@ -379,7 +379,7 @@ void initLights()
     FastLED.delay(1000 / UPDATES_PER_SECOND);
     brightness = min(400, brightness + 1);
     /* bress the button, skip the sequence. */
-    if (time_end - millis() < 6500 && !ss.digitalRead(SS_SWITCH)) {
+    if (time_end - millis() < 2500 && !ss.digitalRead(SS_SWITCH)) {
       break;
     }
   }
