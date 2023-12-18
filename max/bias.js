@@ -4,9 +4,10 @@ const VEL_MAX = 127;
 const VEL_LOW = 20;
 
 const Pad_out_region = {
-  pad_centercode: 0,
+  pad_noop: 0,
   pad_sizzler_1: 1, pad_sizzler_2: 2,  pad_sizzler_3: 3, pad_sizzler_4: 4,
-  pad_hicenter: 5,  pad_leftcenter: 6, pad_locenter: 7,  pad_rightcenter: 8
+  pad_hicenter: 5,  pad_leftcenter: 6, pad_locenter: 7,  pad_rightcenter: 8, 
+  pad_centercode: 9
 };
 
 function augment() {
@@ -14,7 +15,8 @@ function augment() {
 	var biased   = inputs[4];
 	var sizzlers = inputs.slice(0, 4);
 	
-	if (biased === 9) {
+	if (biased === Pad_out_region.pad_centercode ||
+		biased === Pad_out_region.pad_noop) {
 		outlet(0, sizzlers); 
 	}
 	else {
