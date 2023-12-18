@@ -107,11 +107,9 @@ void setup() {
     /* KEY - ROTARY KNOB CONTROLLERS */
     if (!ss.begin(SEESAW_ADDR)) {
       Serial.println("Couldn't find seesaw rotary encoder on default address");
-      while(1) delay(10);
     }
 
     ss.pinMode(SS_SWITCH, INPUT_PULLUP);
-
     encoder_position = ss.getEncoderPosition();
     ss.setGPIOInterrupts((uint32_t)1 << SS_SWITCH, true);
     ss.enableEncoderInterrupt();
@@ -358,7 +356,20 @@ void initLights()
 
   float brightness = 4.0; 
   const float correction = 255.0 / 400.0;
+  uint8_t volume = 0;
   while (millis() < time_end) {
+    
+    if (time_end - millis() > 3500) {
+      volume = min(200, ++volume);
+    } else {
+      volume = volume == 0 ? 0 : --volume;
+    }
+    /* sound on, increasing-then-decreasing volume */
+    Serial.print("1 0 0 3 0 1 ");
+    Serial.print(volume);
+    Serial.print(" ");
+    Serial.println(0);
+
     static uint8_t startIndex = 0;
     startIndex = startIndex + 1; /* motion speed */
     
@@ -372,4 +383,6 @@ void initLights()
       break;
     }
   }
+  /* kill release */
+  Serial.println("0 0 0 0 0 0 0 1");
 }
