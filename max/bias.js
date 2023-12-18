@@ -14,10 +14,12 @@ function augment() {
 	var inputs   = arrayfromargs(arguments);
 	var biased   = inputs[4];
 	var sizzlers = inputs.slice(0, 4);
+	var volumes  = [100, 100, 100, 100];
 	
 	if (biased === Pad_out_region.pad_centercode ||
 		biased === Pad_out_region.pad_noop) {
 		outlet(0, sizzlers); 
+		outlet(1, volumes);
 	}
 	else {
 	const biasedlist = [];
@@ -47,12 +49,23 @@ function augment() {
 		}
 	}
 		
-	const augmenter = function (elem, idx) {
-		return elem === 0 ? 0 : (biasedlist.indexOf(idx + 1) >= 0) ? VEL_MAX : VEL_LOW;	
+	const augment_velocity = function (elem, idx) {
+		return elem === 0 ? 				   0 
+		: (biasedlist.indexOf(idx + 1) >= 0) ? VEL_MAX 
+		: 									   VEL_LOW;	
+	};
+	/* volume bias */
+
+	const augment_volume = function (elem, idx) {
+		return biasedlist.length === 0 ?           elem 
+			: (biasedlist.indexOf(idx + 1) >= 0) ? elem + 20 
+			:                                      elem - 40;	
 	};
 	
+	const velocities = sizzlers.map(augment_velocity);
+	const newvolumes    = volumes.map(augment_volume);
 	
-	var augmented = sizzlers.map(augmenter);
-	outlet(0, augmented);
+	outlet(0, velocities);
+	outlet(1, newvolumes);
 	}
 }
