@@ -14,7 +14,7 @@ function augment() {
 	var biased   = inputs[4];
 	var sizzlers = inputs.slice(0, 4);
 	
-	if (biased === 0) {
+	if (biased === 9) {
 		outlet(0, sizzlers); 
 	}
 	else {
@@ -44,11 +44,7 @@ function augment() {
 			break;
 		}
 	}
-	
-	post("biasedlist");
-	post(biasedlist);
-	post("\n");
-	
+		
 	const augmenter = function (elem, idx) {
 		return elem === 0 ? 0 : (biasedlist.indexOf(idx + 1) >= 0) ? VEL_MAX : VEL_LOW;	
 	};

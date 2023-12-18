@@ -116,8 +116,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 938.46998547712974, 671.0, 98.0, 22.0 ],
-					"text" : "if $i1 == 1 then 0"
+					"patching_rect" : [ 938.46998547712974, 671.0, 147.0, 22.0 ],
+					"text" : "if $i1 == 1 then 0 else 127"
 				}
 
 			}
@@ -275,18 +275,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 867.543361862500433, 384.999969005584717, 50.0, 22.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-22",
-					"linecount" : 4,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 739.543361862500433, 517.0, 90.0, 60.0 ],
-					"text" : "TODO:  Volume knob's been zeroing out lately."
 				}
 
 			}
@@ -722,7 +710,7 @@
 					"outlettype" : [ "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 492.002640215555857, 420.666646003723145, 20.0, 140.0 ],
-					"size" : 600.0
+					"size" : 13.0
 				}
 
 			}
@@ -749,7 +737,7 @@
 					"outlettype" : [ "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 600.171390215555903, 420.666646003723145, 20.0, 140.0 ],
-					"size" : 9.0
+					"size" : 10.0
 				}
 
 			}
